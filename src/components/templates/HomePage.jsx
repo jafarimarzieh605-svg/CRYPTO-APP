@@ -10,20 +10,22 @@ function HomePage() {
 
      
   useEffect(() => {
+    setIsLoding(true)
 
     const getData = async () =>{
-        const res = await fetch(getCoinList());
+        const res = await fetch(getCoinList(page));
         const json = await res.json();
         setCoins(json);
     //   fetch( getCoinList ).then((res) => res.json()).then((json) => setCoins(json));
     setIsLoding(false)
     };
     getData();
-  }, []);   
+  }, [page]);   
   return (
     <div>
-      <Pagination  page={page} setPage={setPage}/>
-        <Tablecoin coins={coins} isLoding={isLoding} />
+        <Tablecoin coins={coins} isLoding={isLoding} /> 
+         <Pagination  page={page} setPage={setPage}/>
+
     </div>
   )
 }
