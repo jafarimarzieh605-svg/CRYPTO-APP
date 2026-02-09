@@ -1,11 +1,14 @@
-import chartUp from "../../assets/chart-up.svg"
-import chartDown from "../../assets/chart-down.svg"
+
+import { CircularProgress } from 'react-loader-spinner';
+
+import chartUp from "../../assets/chart-up.svg";
+import chartDown from "../../assets/chart-down.svg";
 
 function Tablecoin({coins, isLoding }) {
     
   return (
     <div>
-       {isLoding ? <p>Loading...</p> : ( <table>
+       {isLoding ? <CircularProgress color="#00b4d8" height="150" width="150" /> : ( <table>
             <thead>
                 <tr>
                     <th>Coin</th>
