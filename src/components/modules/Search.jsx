@@ -1,47 +1,74 @@
 import { useEffect } from "react";
-import { useState } from "react"
+import { useState } from "react";
+import { CircularProgress } from 'react-loader-spinner';
+
 import { searchCoin } from "../../services/cryptoApi";
 
-function Search({currency, setCurrency}) {
+
+function Search({ currency, setCurrency }) {
     const [text, setText] = useState("");
     const [coins, setCoins] = useState([]);
+     const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
-const controllre = new AbortController();
+          const controller = new AbortController();
 
-        if (!text) return;
+        if (!text) {
+            setCoins([]);
+            setIsLoading(false);
+            return;
+        } 
+
         const search = async () => {
             try {
-            const res = await fetch (searchCoin(text), {signal: controllre.signal});
+
+            const res = await fetch (searchCoin(text), { signal: controller.signal });
             const json = await res.json();
             console.log(json);
             
-            if (json.coins) { setCoins(json.coins)} else {
+            if (json.coins) {
+                setCoins(json.coins);
+                 setIsLoading(false); 
+               
+            }
+            
+            else {
                 alert(json.status.error_message);
             }
             } catch (error) {
                 if (error.name !== "AbortError") {
                     alert(error.message); 
                 }
-            }
+                setIsLoading(false);
+            }  
            
       
         };
-        
+        setIsLoading(true);
         search();
-        return () => controllre.abort();
-        
+        return () => controller.abort();
+    
     },[text])
   return (
     <div>
         <input type="text" placeholder="Search" value={text} onChange={ (e) => setText( e.target.value )}/>
-        <select value={currency} onChange={ e => setCurrency(e.target.value)}>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="JPY">JPY</option>
+        <select value={currency} onChange={ (e) => setCurrency(e.target.value)}>
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+            <option value="jpy">JPY</option>
         </select>
+        <div>
+            { isLoading && <CircularProgress width="25px" height="25px"/> }
+            <ul>
+                {coins.map( (coin) => <li key={coin.id}>
+                    <img src={coin.thumb} alt={coin.name} />
+                    <p>{coin.name}</p>
+                </li>)}
+            </ul>
+        </div>
     </div>
   )
 }
 
-export default Search
+export default Search;
