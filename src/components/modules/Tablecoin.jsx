@@ -1,10 +1,11 @@
 
 import { CircularProgress } from 'react-loader-spinner';
+import { marketChart } from '../../services/cryptoApi';
 
 import chartUp from "../../assets/chart-up.svg";
 import chartDown from "../../assets/chart-down.svg";
 import styles from "../modules/TableCoin.module.css"
-function Tablecoin({coins, isLoding }) {
+function Tablecoin({coins, isLoding, setChart }) {
     
   return (
     <div className={styles.container}>
@@ -23,7 +24,7 @@ function Tablecoin({coins, isLoding }) {
 
             <tbody>
                 {coins.map((coin) =>(
-                    <TableRow coin={coin} key={coin.id} />
+                    <TableRow coin={coin} key={coin.id} setChart={setChart} />
                 ) )}
             </tbody>
 
@@ -36,12 +37,35 @@ function Tablecoin({coins, isLoding }) {
 
 export default Tablecoin;
 
-const TableRow = ({ coin: {name, image, symbol, total_volume, current_price, price_change_percentage_24h : price_change } }) => {
+const TableRow = ({
+     coin: {
+        id,
+        name,
+        image,
+        symbol,
+        total_volume,
+        current_price,
+        price_change_percentage_24h : price_change,
+         },
+        setChart,
+ }) => {
+   const showHandler = async() => { 
+   try {
+    const res = await fetch(marketChart(id));
+    const json = await res.json();
+    console.log(json);
+    setChart(json);
+    
+   } catch (error) {
+    setChart(null);
+   }
+   }
+
     return (
         <tr>
                     
                     <td>
-                        <div className={styles.symbol}>
+                        <div className={styles.symbol} onClick={showHandler}>
                             <img src={image} alt="" />
                             <span>{symbol.toUpperCase()}</span>
                         </div>

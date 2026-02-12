@@ -9,3 +9,5 @@ export const getCoinList = (page, currency) => {
 export const searchCoin = (query) => {
   return `${BASE_URL}/search?query=${query}&x_cg_demo_api_key=${API_KEY}`;
 };
+
+export const marketChart = coin => `${BASE_URL}/coins/${coin}/markets_chart?vs_currency=usd&days=7`;
