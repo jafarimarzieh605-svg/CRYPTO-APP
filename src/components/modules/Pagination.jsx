@@ -4,14 +4,14 @@ import styles from "../modules/Pagination.module.css";
 function Pagination({ page, setPage}) {
 
      const previousHandler = () => {
-        if (page <= 1) return;
-       setPage(() => page - 1 );
+        if ((page) <= 1) return;
+       setPage((page) => page - 1 );
 
      } 
 
      const nextHandler = () => {
-        if ( page >= 10 ) return;
-       setPage(() => page + 1 );
+        if ( (page) >= 10 ) return;
+       setPage((page) => page + 1 );
 
      }
 
@@ -19,7 +19,7 @@ function Pagination({ page, setPage}) {
 
 
   return (
-    <div className={styles.Pagination}>
+    <div className={styles.pagination}>
      <button 
      onClick={previousHandler}
       className={ page === 1 ? styles.disabled : null }>previous</button>
